@@ -1,0 +1,44 @@
+.admin-container {
+  display: flex;
+  min-height: 80vh;
+}
+
+.admin-sidebar {
+  background-color: var(--admin-sidebar-bg, #2f3542); /* fallback if no theme yet */
+  color: white;
+  width: 200px;
+  padding: 1rem;
+}
+
+.admin-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-sidebar li {
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.admin-sidebar li.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 2rem;
+  background-color: #fff;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  text-align: left;
+}

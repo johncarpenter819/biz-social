@@ -1,0 +1,47 @@
+const USERS_KEY = "users";
+
+function loadUsers() {
+  const stored = localStorage.getItem(USERS_KEY);
+  if (stored) return JSON.parse(stored);
+  const defaultUsers = [
+    { username: "admin", password: "admin123", role: "admin" },
+    { username: "employee", password: "test123", role: "employee" }
+  ];
+  localStorage.setItem(USERS_KEY, JSON.stringify(defaultUsers));
+  return defaultUsers;
+}
+
+function saveUsers(users) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+
+export function login(username, password) {
+  const users = loadUsers();
+  const user = users.find(u => u.username === username && u.password === password);
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+    return { success: true, user };
+  }
+  return { success: false };
+}
+
+export function logout() {
+  localStorage.removeItem("user");
+}
+
+export function getUser() {
+  const userStr = localStorage.getItem("user");
+  return userStr ? JSON.parse(userStr) : null;
+}
+
+export function signup(username, password) {
+  const users = loadUsers();
+  if (users.some(u => u.username === username)) {
+    return { success: false, message: "Username already taken" };
+  }
+  const newUser = { username, password, role: "employee" };
+  users.push(newUser);
+  saveUsers(users);
+  localStorage.setItem("user", JSON.stringify(newUser));
+  return { success: true, user: newUser };
+}

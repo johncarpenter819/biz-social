@@ -1,0 +1,32 @@
+:root {
+  --primary: #004aad;
+  --primary-text: #ffffff; /* default white text on primary */
+  --secondary: #f0f0f0;
+  --secondary-text: #222222;
+  --admin-sidebar-bg: #2f3542;
+  --admin-sidebar-text: #ffffff;
+  --feed-bg: #ffffff;
+  --font: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background-color: var(--secondary);
+  color: #222;
+}
+
+.feed-container {
+  background-color: var(--feed-bg);
+  color: var(--secondary-text);
+}
+
+.admin-sidebar {
+  background-color: var(--admin-sidebar-bg);
+  color: var(--admin-sidebar-text);
+}
+
+.admin-panel label {
+  display: block;
+  margin: 1rem 0;
+}

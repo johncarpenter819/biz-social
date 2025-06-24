@@ -1,0 +1,22 @@
+.navbar {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--primary);
+  color: var(--primary-text);
+}
+
+.nav-link, .nav-button {
+  color: var(--primary-text);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover, .nav-button:hover {
+  opacity: 0.8;
+}
