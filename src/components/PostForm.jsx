@@ -5,8 +5,6 @@ export default function PostForm({ onAddPost, currentUser }) {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
 
-  console.log("Posting as user:", currentUser); // log here
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -15,7 +13,6 @@ export default function PostForm({ onAddPost, currentUser }) {
       return;
     }
 
-    // Create URLs for all files so they can be previewed/rendered
     const filesWithUrls = files.map((file) => ({
       url: URL.createObjectURL(file),
       name: file.name,
@@ -27,7 +24,7 @@ export default function PostForm({ onAddPost, currentUser }) {
       content,
       timestamp: new Date().toISOString(),
       files: filesWithUrls,
-      user: currentUser || { username: "Unknown user" }, // fallback user if none provided
+      user: currentUser || { username: "Unknown user" },
     };
 
     onAddPost(newPost);
@@ -37,10 +34,9 @@ export default function PostForm({ onAddPost, currentUser }) {
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-  console.log("Files selected:", selectedFiles);
-  setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
-  e.target.value = null;
-};
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+    e.target.value = null;
+  };
 
   const removeFile = (index) => {
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
@@ -48,13 +44,20 @@ export default function PostForm({ onAddPost, currentUser }) {
 
   return (
     <form className="post-form" onSubmit={handleSubmit}>
-      <textarea
-        className="post-textarea"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="What's on your mind?"
-        rows={4}
-      />
+      <div className="post-form-header">
+        <img
+          src={currentUser?.avatar || "/img/avatar1.svg"}
+          alt="Your avatar"
+          className="post-avatar"
+        />
+        <textarea
+          className="post-textarea"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="What's on your mind?"
+          rows={3}
+        />
+      </div>
 
       {files.length > 0 && (
         <div className="file-preview-list">
@@ -75,17 +78,16 @@ export default function PostForm({ onAddPost, currentUser }) {
 
       <div className="post-form-footer">
         <label htmlFor="file-upload" className="file-upload-label">
-          📎 Add Files
+          📷 Photo/Video
         </label>
         <input
           type="file"
           id="file-upload"
           className="file-upload-input"
           onChange={handleFileChange}
-          accept="image/*,video/*,application/pdf"
+          accept="image/*,video/*"
           multiple
         />
-
         <button type="submit" className="post-submit-button">
           Post
         </button>

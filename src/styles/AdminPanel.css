@@ -1,0 +1,62 @@
+.admin-panel {
+  padding: 2rem;
+  background-color: var(--secondary);
+  color: var(--secondary-text);
+  border-radius: 8px;
+  max-width: 600px;
+  margin: auto;
+  font-family: sans-serif;
+}
+
+.admin-panel h2,
+.admin-panel h3 {
+  color: var(--primary, #004aad);
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  padding-bottom: 0.3rem;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid var(--primary, #004aad);
+  letter-spacing: 1.2px;
+}
+
+.admin-panel label {
+  display: block;
+  margin: 1rem 0;
+  font-weight: bold;
+}
+
+.admin-panel input[type="color"],
+.admin-panel input[type="text"],
+.admin-panel input[type="file"] {
+  margin-top: 0.25rem;
+  padding: 0.3rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 0.5rem;
+}
+
+.admin-panel hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.admin-panel .preview {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.admin-panel .preview img {
+  height: 70px;
+  border-radius: 50%;
+}
+
+.admin-panel .preview p {
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+input{
+    gap: 20px;
+}

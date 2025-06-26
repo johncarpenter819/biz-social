@@ -1,5 +1,5 @@
-// Post.jsx
 import React from "react";
+import "../styles/Post.css";
 
 function formatDateTime(isoString) {
   const date = new Date(isoString);
@@ -14,39 +14,45 @@ function formatDateTime(isoString) {
 
 export default function Post({ post }) {
   return (
-    <div className="post">
-      <div className="post-header" style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-        {post.user?.username || "Unknown user"}
-      </div>
-      <p>{post.content}</p>
-
-      {post.files && post.files.length > 0 && (
-        <div className="post-files">
-          {post.files.map((file, idx) => {
-            // Show images and videos inline, otherwise show file name as link
-            if (file.type.startsWith("image/")) {
-              return <img key={idx} src={file.url} alt={file.name} style={{ maxWidth: "100%", marginTop: "0.5rem" }} />;
-            } else if (file.type.startsWith("video/")) {
-              return (
-                <video key={idx} controls style={{ maxWidth: "100%", marginTop: "0.5rem" }}>
-                  <source src={file.url} type={file.type} />
-                  Your browser does not support the video tag.
-                </video>
-              );
-            } else {
-              return (
-                <a key={idx} href={file.url} target="_blank" rel="noreferrer" style={{ display: "block", marginTop: "0.5rem" }}>
-                  {file.name}
-                </a>
-              );
-            }
-          })}
+    <div className="post-card">
+      <div className="post-top">
+        <img
+          src={post.user?.avatar || "/img/avatar1.svg"}
+          alt="User avatar"
+          className="post-avatar"
+        />
+        <div>
+          <div className="post-username">{post.user?.username}</div>
+          <div className="post-timestamp">{formatDateTime(post.timestamp)}</div>
         </div>
-      )}
+      </div>
 
-      <small style={{ color: "#555", fontSize: "0.85rem", marginTop: "0.5rem", display: "block" }}>
-        Posted on {formatDateTime(post.timestamp)}
-      </small>
+      <div className="post-content">
+        <p>{post.content}</p>
+
+        {post.files && post.files.length > 0 && (
+          <div className="post-files">
+            {post.files.map((file, idx) => {
+              if (file.type.startsWith("image/")) {
+                return <img key={idx} src={file.url} alt={file.name} />;
+              } else if (file.type.startsWith("video/")) {
+                return (
+                  <video key={idx} controls>
+                    <source src={file.url} type={file.type} />
+                    Your browser does not support the video tag.
+                  </video>
+                );
+              } else {
+                return (
+                  <a key={idx} href={file.url} target="_blank" rel="noreferrer">
+                    {file.name}
+                  </a>
+                );
+              }
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

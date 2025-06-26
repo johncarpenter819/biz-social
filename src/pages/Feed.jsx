@@ -1,26 +1,34 @@
-// Feed.jsx
 import React, { useState } from "react";
 import PostForm from "../components/PostForm";
 import Post from "../components/Post";
-import { getUser } from "../utils/auth";  // <-- import getUser
+import { getUser } from "../utils/auth";
+import "../styles/Feed.css";
 
 export default function Feed() {
   const [posts, setPosts] = useState([]);
-
-  // get current user once when rendering Feed
   const currentUser = getUser();
 
-  const addPost = (post) => {
-    setPosts((prevPosts) => [post, ...prevPosts]);
+  const addPost = (newPost) => {
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
 
   return (
-    <div className="feed-container">
-      {/* pass currentUser here */}
-      <PostForm onAddPost={addPost} currentUser={currentUser} />
-      {posts.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
-    </div>
+    <>
+      <div className="feed-container">
+        <PostForm onAddPost={addPost} currentUser={currentUser} />
+        {posts.map((post) => (
+          <Post key={post.id} post={post} />
+        ))}
+      </div>
+
+      <aside className="feed-sidebar">
+        <h3>Trending</h3>
+        <ul>
+          <li>🔥 Company Retreat</li>
+          <li>💼 Promotions</li>
+          <li>📢 Announcements</li>
+        </ul>
+      </aside>
+    </>
   );
 }

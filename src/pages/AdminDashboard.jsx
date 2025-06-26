@@ -4,7 +4,7 @@ import AdminPanel from "../components/AdminPanel";
 import AdminUsers from "../components/AdminUsers";
 import "../styles/AdminDashboard.css";
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ companyInfo, setCompanyInfo, fallbackLogo }) {
   const [selected, setSelected] = useState("users");
 
   return (
@@ -12,7 +12,13 @@ export default function AdminDashboard() {
       <AdminSidebar selected={selected} setSelected={setSelected} />
       <div className="admin-content">
         {selected === "users" && <AdminUsers />}
-        {selected === "theme" && <AdminPanel />}
+        {selected === "theme" && (
+          <AdminPanel
+            companyInfo={companyInfo}
+            setCompanyInfo={setCompanyInfo}
+            fallbackLogo={fallbackLogo}
+          />
+        )}
         {selected === "analytics" && <p>Coming Soon: Company analytics...</p>}
       </div>
     </div>
