@@ -1,54 +1,103 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ThemeProvider } from "./components/ThemeProvider";
+import Navbar from "./components/Navbar";
 import Feed from "./pages/Feed";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./pages/Login";
-import Navbar from "./components/Navbar";
-import { ThemeProvider } from "./components/ThemeProvider";
-import PrivateRoute from "./components/PrivateRoute";
 import Register from "./pages/Register";
 import { getUser } from "./utils/auth";
 
-const domainLogo = "/img/company.webp";
+function ProtectedRoute({ user, children, adminOnly = false }) {
+  if (!user) return <Navigate to="/login" replace />;
+  if (adminOnly && user.role !== "admin") return <Navigate to="/" replace />;
+  return children;
+}
 
-export default function App() {
-  const [companyInfo, setCompanyInfo] = useState({
-    name: "My Company",
-    logo: "" // admin can upload a new logo
-  });
-
+function App() {
   const [user, setUser] = useState(getUser());
 
+  // Manage posts state here, load from localStorage initially
+  const [posts, setPosts] = useState(() => {
+    const savedPosts = localStorage.getItem("posts");
+    return savedPosts ? JSON.parse(savedPosts) : [];
+  });
+
+  // Persist posts to localStorage whenever posts change
   useEffect(() => {
-    setUser(getUser());
+    localStorage.setItem("posts", JSON.stringify(posts));
+  }, [posts]);
+
+  // Delete post handler that updates state
+  const handleDeletePost = (postId) => {
+    setPosts((prev) => prev.filter((post) => post.id !== postId));
+  };
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUser(getUser());
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    const interval = setInterval(() => {
+      const latestUser = getUser();
+      setUser((prev) =>
+        JSON.stringify(prev) !== JSON.stringify(latestUser) ? latestUser : prev
+      );
+    }, 1000);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(interval);
+    };
   }, []);
 
   return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <Navbar companyInfo={companyInfo} user={user} />
+    <BrowserRouter>
+      <ThemeProvider companyId={user?.companyId}>
+        <Navbar user={user} />
         <Routes>
-          <Route path="/" element={<Feed />} />
-          <Route path="/profile/:username" element={<Profile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          {/* Public routes with setUser passed in */}
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/register" element={<Register setUser={setUser} />} />
+
+          {/* Protected routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute user={user}>
+                <Feed posts={posts} onDeletePost={handleDeletePost} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/:username"
+            element={
+              <ProtectedRoute user={user}>
+                <Profile posts={posts} onDeletePost={handleDeletePost} />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/admin"
             element={
-              <PrivateRoute requiredRole="admin">
-                <AdminDashboard
-                  companyInfo={companyInfo}
-                  setCompanyInfo={setCompanyInfo}
-                  fallbackLogo={domainLogo}
-                  user={user}
-                  setUser={setUser}
-                />
-              </PrivateRoute>
+              <ProtectedRoute user={user} adminOnly={true}>
+                <AdminDashboard />
+              </ProtectedRoute>
             }
           />
+
+          {/* Fallback route */}
+          <Route
+            path="*"
+            element={<Navigate to={user ? "/" : "/login"} replace />}
+          />
         </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
+
+export default App;

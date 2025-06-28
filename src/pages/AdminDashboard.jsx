@@ -4,7 +4,13 @@ import AdminPanel from "../components/AdminPanel";
 import AdminUsers from "../components/AdminUsers";
 import "../styles/AdminDashboard.css";
 
-export default function AdminDashboard({ companyInfo, setCompanyInfo, fallbackLogo }) {
+export default function AdminDashboard({ fallbackLogo }) {
+  // Initialize companyInfo state with default empty values
+  const [companyInfo, setCompanyInfo] = useState({
+    name: "",
+    logo: "",
+  });
+
   const [selected, setSelected] = useState("users");
 
   return (

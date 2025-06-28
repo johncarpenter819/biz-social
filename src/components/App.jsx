@@ -5,24 +5,58 @@ import Navbar from "./components/Navbar";
 import Feed from "./pages/Feed";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+function ProtectedRoute({ user, children, adminOnly = false }) {
+  if (!user) return <Navigate to="/login" replace />;
+  if (adminOnly && user.role !== "admin") return <Navigate to="/" replace />;
+  return children;
+}
 
 function App() {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const { companyId, role } = user;
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!user.id) return <Navigate to="/login" />;
-  
   return (
-    <ThemeProvider companyId={companyId}>
-      <BrowserRouter>
-        <Navbar />
+    <BrowserRouter>
+      <ThemeProvider companyId={user?.companyId}>
+        <Navbar user={user} />
         <Routes>
-          <Route path="/" element={<Feed />} />
-          <Route path="/profile/:username" element={<Profile />} />
-          {role === "admin" && <Route path="/admin" element={<AdminDashboard />} />}
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Protected routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute user={user}>
+                <Feed />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/:username"
+            element={
+              <ProtectedRoute user={user}>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute user={user} adminOnly={true}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Redirect unknown routes */}
+          <Route path="*" element={<Navigate to={user ? "/" : "/login"} replace />} />
         </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

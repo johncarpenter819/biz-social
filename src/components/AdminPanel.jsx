@@ -7,14 +7,39 @@ export default function AdminPanel({ companyInfo, setCompanyInfo, fallbackLogo }
   const [secondaryColor, setSecondaryColor] = useState("#f5f6fa");
   const [sidebarColor, setSidebarColor] = useState("#2f3542");
   const [feedBgColor, setFeedBgColor] = useState("#ffffff");
+  const [navbarBgImagePreview, setNavbarBgImagePreview] = useState(null);
+  const [navbarBgColor, setNavbarBgColor] = useState("#000000");
 
-  // Load saved theme from localStorage
   useEffect(() => {
     const savedTheme = JSON.parse(localStorage.getItem("theme")) || {};
+
+    // Clean up invalid navbarBgImage URLs that cause 404 errors
+    if (
+      savedTheme.navbarBgImage &&
+      !savedTheme.navbarBgImage.startsWith("data:image")
+    ) {
+      delete savedTheme.navbarBgImage;
+      localStorage.setItem("theme", JSON.stringify(savedTheme));
+    }
+
     if (savedTheme.primaryColor) setPrimaryColor(savedTheme.primaryColor);
     if (savedTheme.secondaryColor) setSecondaryColor(savedTheme.secondaryColor);
     if (savedTheme.sidebarColor) setSidebarColor(savedTheme.sidebarColor);
     if (savedTheme.feedBgColor) setFeedBgColor(savedTheme.feedBgColor);
+
+    if (savedTheme.navbarBgColor) {
+      setNavbarBgColor(savedTheme.navbarBgColor);
+      document.documentElement.style.setProperty("--navbar-bg", savedTheme.navbarBgColor);
+      document.documentElement.style.setProperty(
+        "--navbar-text",
+        getContrastColor(savedTheme.navbarBgColor)
+      );
+    } else if (!savedTheme.navbarBgImage) {
+      // Default navbar bg color if no image or color saved
+      setNavbarBgColor("#000000");
+      document.documentElement.style.setProperty("--navbar-bg", "#000000");
+      document.documentElement.style.setProperty("--navbar-text", "#ffffff");
+    }
 
     const applyThemeVar = (cssVar, value, textVar) => {
       if (value) {
@@ -29,6 +54,11 @@ export default function AdminPanel({ companyInfo, setCompanyInfo, fallbackLogo }
     applyThemeVar("--secondary", savedTheme.secondaryColor, "--secondary-text");
     applyThemeVar("--admin-sidebar-bg", savedTheme.sidebarColor, "--admin-sidebar-text");
     applyThemeVar("--feed-bg", savedTheme.feedBgColor);
+
+    if (savedTheme.navbarBgImage) {
+      updateNavbarBgImage(savedTheme.navbarBgImage);
+      setNavbarBgImagePreview(savedTheme.navbarBgImage);
+    }
   }, []);
 
   const updateTheme = (key, value) => {
@@ -58,9 +88,56 @@ export default function AdminPanel({ companyInfo, setCompanyInfo, fallbackLogo }
     if (textVarMap[key]) {
       document.documentElement.style.setProperty(textVarMap[key], getContrastColor(value));
     }
+
+    if (key === "primaryColor") {
+      document.documentElement.style.setProperty("--navbar-bg", value);
+      document.documentElement.style.setProperty("--navbar-text", getContrastColor(value));
+    }
   };
 
-  // === 🆕 Company Branding ===
+  // New: Update navbar background color and clear any navbar bg image
+  const updateNavbarBgColor = (color) => {
+    setNavbarBgColor(color);
+
+    // Clear navbar background image CSS and localStorage
+    document.documentElement.style.setProperty("--navbar-bg-image", "none");
+
+    const currentTheme = JSON.parse(localStorage.getItem("theme")) || {};
+    const updatedTheme = { ...currentTheme, navbarBgColor: color };
+    delete updatedTheme.navbarBgImage; // remove image if present
+
+    localStorage.setItem("theme", JSON.stringify(updatedTheme));
+
+    document.documentElement.style.setProperty("--navbar-bg", color);
+    document.documentElement.style.setProperty("--navbar-text", getContrastColor(color));
+
+    setNavbarBgImagePreview(null);
+  };
+
+  const updateNavbarBgImage = (imageDataUrl) => {
+    const cssValue = imageDataUrl ? `url(${imageDataUrl})` : "none";
+    document.documentElement.style.setProperty("--navbar-bg-image", cssValue);
+
+    const currentTheme = JSON.parse(localStorage.getItem("theme")) || {};
+    const updatedTheme = { ...currentTheme, navbarBgImage: imageDataUrl };
+    localStorage.setItem("theme", JSON.stringify(updatedTheme));
+  };
+
+  const handleNavbarBgImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const imageDataUrl = reader.result;
+      updateNavbarBgImage(imageDataUrl);
+      setNavbarBgImagePreview(imageDataUrl);
+      // Clear navbarBgColor state because image overrides color
+      setNavbarBgColor("");
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleNameChange = (e) => {
     setCompanyInfo({ ...companyInfo, name: e.target.value });
   };
@@ -118,8 +195,35 @@ export default function AdminPanel({ companyInfo, setCompanyInfo, fallbackLogo }
           onChange={(e) => updateTheme("feedBgColor", e.target.value)}
         />
       </label>
+      <br />
 
-      <hr style={{ margin: "2rem 0" }} />
+      <label>
+        Navbar Background Color:
+        <input
+          type="color"
+          value={navbarBgColor}
+          onChange={(e) => updateNavbarBgColor(e.target.value)}
+        />
+      </label>
+      <br />
+
+      <label>
+        Navbar Background Image:
+        <input type="file" accept="image/*" onChange={handleNavbarBgImageChange} />
+      </label>
+
+      {navbarBgImagePreview && (
+        <div className="preview">
+          <p>Navbar Background Preview:</p>
+          <img
+            src={navbarBgImagePreview}
+            alt="Navbar Background Preview"
+            style={{ width: "100%", maxHeight: "150px", objectFit: "cover" }}
+          />
+        </div>
+      )}
+
+      <hr />
 
       <h2>Company Branding</h2>
       <label>
@@ -138,14 +242,14 @@ export default function AdminPanel({ companyInfo, setCompanyInfo, fallbackLogo }
         <input type="file" accept="image/*" onChange={handleLogoChange} />
       </label>
 
-      <div style={{ marginTop: "1rem" }}>
+      <div className="preview">
         <p>Live Preview:</p>
         <img
           src={companyInfo.logo || fallbackLogo}
           alt="Preview"
           style={{ height: "70px", borderRadius: "50%" }}
         />
-        <p style={{ fontWeight: "bold" }}>{companyInfo.name || "My Company"}</p>
+        <p>{companyInfo.name || "My Company"}</p>
       </div>
     </div>
   );

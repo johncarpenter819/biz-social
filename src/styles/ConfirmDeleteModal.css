@@ -1,0 +1,109 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 11000;
+  backdrop-filter: blur(6px);
+  animation: fadeInScale 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content.delete-confirmation {
+  width: 320px;
+  height: 320px; /* perfect square */
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  border: 3px solid var(--primary);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    0 0 15px var(--primary);
+  padding: 2.5rem 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  color: var(--primary);
+  user-select: none;
+  transform-origin: center;
+}
+
+.modal-content.delete-confirmation p {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 2.5rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.8rem 0;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow:
+    0 6px 10px rgba(0,0,0,0.1);
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.btn-danger {
+  background-color: var(--primary);
+  color: var(--primary-text);
+  border: none;
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+  background-color: #002f80;
+  box-shadow:
+    0 10px 20px rgba(0, 47, 128, 0.6);
+  transform: scale(1.08);
+  outline: none;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 3px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: var(--primary);
+  color: var(--primary-text);
+  box-shadow:
+    0 10px 20px rgba(0, 74, 173, 0.7);
+  transform: scale(1.08);
+  outline: none;
+}
+
+/* Accessibility focus for keyboard users */
+.btn:focus-visible {
+  outline: 3px solid #ffd54f;
+  outline-offset: 2px;
+}

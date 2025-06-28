@@ -1,62 +1,76 @@
 .admin-panel {
+  max-width: 700px;
+  margin: 0 auto;
   padding: 2rem;
-  background-color: var(--secondary);
-  color: var(--secondary-text);
+  background-color: var(--secondary, #f5f6fa);
+  color: var(--secondary-text, #000);
   border-radius: 8px;
-  max-width: 600px;
-  margin: auto;
-  font-family: sans-serif;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
 
-.admin-panel h2,
-.admin-panel h3 {
-  color: var(--primary, #004aad);
-  font-weight: 700;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  padding-bottom: 0.3rem;
+.admin-panel h2 {
+  margin-top: 2rem;
   margin-bottom: 1rem;
-  border-bottom: 3px solid var(--primary, #004aad);
-  letter-spacing: 1.2px;
+  font-size: 1.5rem;
+  color: var(--primary-text, #000);
 }
 
 .admin-panel label {
   display: block;
-  margin: 1rem 0;
+  margin-bottom: 1rem;
   font-weight: bold;
+  color: var(--primary-text, #000);
 }
 
-.admin-panel input[type="color"],
 .admin-panel input[type="text"],
-.admin-panel input[type="file"] {
+.admin-panel input[type="file"],
+.admin-panel input[type="color"] {
   margin-top: 0.25rem;
-  padding: 0.3rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
+  padding: 0.4rem;
   border-radius: 4px;
-  margin-left: 0.5rem;
+  border: 1px solid #ccc;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+
+.admin-panel input[type="color"] {
+  padding: 0;
+  height: 2.25rem;
+  width: 100px;
 }
 
 .admin-panel hr {
-  margin: 2rem 0;
   border: none;
   border-top: 1px solid #ccc;
+  margin: 2rem 0;
 }
 
-.admin-panel .preview {
+.preview {
   margin-top: 1rem;
-  text-align: center;
 }
 
-.admin-panel .preview img {
-  height: 70px;
-  border-radius: 50%;
-}
-
-.admin-panel .preview p {
-  font-weight: bold;
+.preview img {
+  border-radius: 6px;
+  border: 1px solid #ccc;
   margin-top: 0.5rem;
+  max-width: 100%;
 }
-input{
-    gap: 20px;
+
+.preview p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 600px) {
+  .admin-panel {
+    padding: 1rem;
+  }
+
+  .admin-panel input[type="text"],
+  .admin-panel input[type="file"],
+  .admin-panel input[type="color"] {
+    max-width: 100%;
+  }
 }
