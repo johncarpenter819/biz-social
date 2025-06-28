@@ -8,14 +8,44 @@ const DOMAIN_LOGO = "/img/company.webp";
 
 export default function Navbar({ companyInfo, user }) {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   const [avatar, setAvatar] = useState(user?.avatar || DEFAULT_AVATAR);
-
-  const fileInputRef = useRef(null);
+  const [themeColor, setThemeColor] = useState("#a084ca");
 
   useEffect(() => {
     setAvatar(user?.avatar || DEFAULT_AVATAR);
+
+    const loadColor = () => {
+      const stored = localStorage.getItem("theme-color");
+      setThemeColor(stored || "#a084ca");
+    };
+
+    // Initial load
+    loadColor();
+
+    // Sync with any theme color changes across tabs or components
+    const handleStorage = (e) => {
+      if (e.key === "theme-color") {
+        loadColor();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+
+    return () => window.removeEventListener("storage", handleStorage);
   }, [user]);
+
+  // This catches changes from Profile.jsx in same tab too
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const stored = localStorage.getItem("theme-color");
+      if (stored && stored !== themeColor) {
+        setThemeColor(stored);
+      }
+    }, 300);
+
+    return () => clearInterval(interval);
+  }, [themeColor]);
 
   const handleLogout = () => {
     logout();
@@ -43,6 +73,10 @@ export default function Navbar({ companyInfo, user }) {
             src={companyInfo?.logo || DOMAIN_LOGO}
             alt="Logo"
             className="navbar-logo"
+            style={{
+              filter: `drop-shadow(0 0 4px ${themeColor})`,
+              transition: "filter 0.3s ease, transform 0.3s ease",
+            }}
           />
           <span className="company-name">{companyInfo?.name || "My Company"}</span>
         </div>

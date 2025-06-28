@@ -26,6 +26,34 @@ const socialLinks = [
   { href: "https://instagram.com", icon: <FaInstagram />, name: "instagram" },
 ];
 
+// Utility function to update all related CSS variables based on a base color
+const updateThemeColors = (baseColor) => {
+  console.log("Updating theme to:", baseColor);
+  
+  const root = document.documentElement;
+
+  const themeVars = {
+    "--purple-muted": baseColor,
+    "--purple-light": baseColor + "cc",
+    "--purple-softer": baseColor + "aa",
+    "--purple-medium": baseColor,
+    "--purple-inset": baseColor + "44",
+    "--purple-hover-light": baseColor + "33",
+    "--purple-dark": baseColor,
+    "--purple-strong": baseColor,
+    "--purple-bg-hover": baseColor + "22",
+    "--primary": baseColor,
+  };
+
+  Object.entries(themeVars).forEach(([key, value]) => {
+    root.style.setProperty(key, value);
+  });
+
+  requestAnimationFrame(() =>{
+    document.documentElement.offsetHeight;
+  });
+};
+
 export default function Profile() {
   const { username } = useParams();
   const [banner, setBanner] = useState(DEFAULT_BANNER);
@@ -37,11 +65,11 @@ export default function Profile() {
   const [userDetails, setUserDetails] = useState(null);
   const [posts, setPosts] = useState([]);
 
-  // New state for color picker
-  const [primaryColor, setPrimaryColor] = useState("#a084ca"); // default purple
+  const [primaryColor, setPrimaryColor] = useState("#a084ca");
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   useEffect(() => {
+    // Load user details and posts
     const allUsers = JSON.parse(localStorage.getItem("users")) || [];
     const user = allUsers.find((u) => u.username === username);
     setUserDetails(user);
@@ -50,6 +78,15 @@ export default function Profile() {
     const savedPosts = JSON.parse(localStorage.getItem("posts")) || [];
     const userPosts = savedPosts.filter((post) => post.user.username === username);
     setPosts(userPosts);
+
+    // Load theme color from localStorage
+    const storedColor = localStorage.getItem("theme-color");
+    if (storedColor) {
+      setPrimaryColor(storedColor);
+      updateThemeColors(storedColor);
+    } else {
+      updateThemeColors(primaryColor);
+    }
   }, [username]);
 
   const handleMouseDown = (e) => {
@@ -81,13 +118,14 @@ export default function Profile() {
   };
 
   const toggleDragMode = () => setIsDragMode((prev) => !prev);
-
-  // Toggle color picker visibility
   const toggleColorPicker = () => setShowColorPicker((v) => !v);
 
-  // Handle primary color change from color picker
   const handleColorChange = (e) => {
-    setPrimaryColor(e.target.value);
+    const newColor = e.target.value;
+    setPrimaryColor(newColor);
+    updateThemeColors(newColor);
+    localStorage.setItem("theme-color", newColor);
+    setTimeout(() => setShowColorPicker(false), 8000);
   };
 
   const bannerStyle = {
@@ -128,7 +166,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="profile-page" style={{ "--primary": primaryColor }}>
+    <div className="profile-page">
       <div
         className="profile-banner"
         style={bannerStyle}
@@ -166,8 +204,6 @@ export default function Profile() {
           >
             <FaHandPaper />
           </button>
-
-          {/* Gear cog button */}
           <button
             className="gear-button"
             title="Change Theme Color"
@@ -177,7 +213,6 @@ export default function Profile() {
             <FaCog />
           </button>
 
-          {/* Color picker */}
           {showColorPicker && (
             <input
               type="color"

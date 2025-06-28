@@ -1,3 +1,7 @@
+:root{
+   --primary: #a084ca; /* fallback */
+}
+
 /* Base Reset */
 * {
   box-sizing: border-box;
@@ -39,7 +43,7 @@ body {
   border-radius: 10px;
   box-sizing: border-box;
   backdrop-filter: saturate(180%) blur(3px); /* glassy blur effect */
-  max-height: 175px;
+  max-height: 100px;
 }
 
 /* Left: Logo + Company */
@@ -50,16 +54,23 @@ body {
 }
 
 .navbar-logo {
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
-  border-radius: 6px;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 10px var(--primary));
+  transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.2) rotate(5deg);
 }
 
 .company-name {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #f9fafb; /* white-ish */
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f2f0ec;
+  letter-spacing: 0.05em;
 }
 
 /* Center: Links */
@@ -70,14 +81,35 @@ body {
 
 .nav-link {
   text-decoration: none;
-  font-size: 0.95rem;
-  color: #f9fafb;
-  font-weight: 500;
-  transition: color 0.2s;
+  font-size: 1rem;
+  color: #f2f0ec;
+  font-weight: 600;
+  position: relative;
+  padding: 0.25rem 0;
+  transition: color 0.25s ease;
 }
 
-.nav-link:hover {
-  color: #60a5fa; /* lighter blue on hover */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  color: var(--primary);
+  outline: none;
+}
+
+.nav-link:hover::after,
+.nav-link:focus::after {
+  width: 100%;
 }
 
 /* Right: Avatar + Logout */
@@ -141,4 +173,10 @@ body {
     justify-content: flex-end;
     width: 100%;
   }
+}
+
+nav.navbar{
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: black;
 }

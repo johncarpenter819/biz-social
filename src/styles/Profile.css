@@ -11,6 +11,7 @@
   --purple-rgba-glow: rgba(177, 156, 217, 0.6);
   --purple-shadow1: rgba(180, 175, 195, 0.5);
   --purple-shadow2: rgba(210, 205, 225, 0.7);
+  --primary: #a084ca; /* fallback */
 }
 
 /* Base Reset */
@@ -23,231 +24,13 @@
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #ffffff; /* changed to pure white */
-  color: #333840; /* dark grey text for readability */
+  background: #ffffff;
+  color: #333840;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
 }
 
-/* Navbar Styles */
-.navbar {
-  width: 100vw;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  background: linear-gradient(
-      135deg,
-      rgba(49, 44, 57, 0.9),
-      rgba(74, 69, 83, 0.85)
-    ),
-    var(--navbar-bg, #312c39);
-  background-image: var(--navbar-bg-image, none);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 1rem 0.5rem;
-  box-sizing: border-box;
-  color: var(--navbar-text, #f2f0ec);
-  box-shadow: 0 4px 8px rgb(0 0 0 / 0.3);
-  backdrop-filter: saturate(120%) blur(8px);
-  transition: background 0.3s ease;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-.navbar-content {
-  max-width: 60%;
-  margin: 0 auto;
-  padding: 1rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 200px;
-  background-color: rgba(20, 20, 25, 0.5);
-  border-radius: 14px;
-  box-sizing: border-box;
-  backdrop-filter: saturate(120%) blur(6px);
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.07);
-  transition: max-width 0.4s ease;
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.navbar-logo {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
-  border-radius: 10px;
-  filter: drop-shadow(0 0 3px #a084ca); /* muted purple glow */
-  transition: transform 0.3s ease;
-}
-
-.navbar-logo:hover {
-  transform: scale(1.1) rotate(5deg);
-}
-
-.company-name {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #f2f0ec;
-  text-shadow: 0 0 6px #a084ca; /* muted purple */
-  letter-spacing: 0.05em;
-}
-
-.navbar-center {
-  display: flex;
-  gap: 2rem;
-}
-
-.nav-link {
-  text-decoration: none;
-  font-size: 1rem;
-  color: #f2f0ec;
-  font-weight: 600;
-  position: relative;
-  padding: 0.25rem 0;
-  transition: color 0.25s ease;
-}
-
-.nav-link::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #a084ca; /* muted purple */
-  transition: width 0.3s ease;
-  border-radius: 2px;
-}
-
-.nav-link:hover,
-.nav-link:focus {
-  color: #a084ca;
-  outline: none;
-}
-
-.nav-link:hover::after,
-.nav-link:focus::after {
-  width: 100%;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.navbar-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #4b4758; /* dark grey-purple */
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 0 6px #a084ca;
-}
-
-.navbar-avatar:hover,
-.navbar-avatar:focus {
-  outline: none;
-  transform: scale(1.1);
-  box-shadow: 0 0 12px #cbb9f6; /* softer purple glow */
-}
-
-.username {
-  font-size: 1rem;
-  color: #f2f0ec;
-  font-weight: 600;
-  user-select: none;
-  text-shadow: 0 0 4px #000000aa;
-  white-space: nowrap;
-}
-
-.logout-button {
-  background: linear-gradient(45deg, #c75c5c, #a84343);
-  color: #fff;
-  border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 3px 8px rgb(168 67 67 / 0.6);
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.logout-button:hover,
-.logout-button:focus {
-  background: linear-gradient(45deg, #a84343, #7f3131);
-  transform: scale(1.05);
-  outline: none;
-}
-
-/* Responsive Navbar */
-@media (max-width: 768px) {
-  .navbar-content {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-    max-width: 90%;
-  }
-
-  .navbar-center {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .navbar-right {
-    align-self: stretch;
-    justify-content: flex-end;
-    width: 100%;
-  }
-}
-
-/* Profile Banner & Avatar Orbit Styles */
-
-.profile-page {
-  width: 100%;
-  background: #fff; /* changed to white */
-  color: #333840; /* dark text */
-  min-height: 100vh;
-  padding-bottom: 3rem;
-  overflow-x: hidden;
-  position: relative;
-  scroll-margin-top: 220px; /* for anchor nav */
-}
-
-/* Banner with soft gradient overlay */
-.profile-banner {
-  position: relative;
-  width: 100%;
-  height: 280px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: grab;
-  user-select: none;
-  transition: background-position 0.3s ease;
-  border-bottom: 4px solid #b19cd9; /* lighter muted purple */
-  box-shadow:
-    inset 0 0 60px 20px rgba(177, 156, 217, 0.6),
-    0 12px 25px rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 30px 30px;
-  overflow: hidden;
-}
-
-.profile-banner:active {
-  cursor: grabbing;
-}
-
-/* Banner controls container */
 .banner-controls {
   position: absolute;
   top: 1rem;
@@ -257,82 +40,31 @@ body {
   z-index: 20;
 }
 
-/* Edit Banner Icon and Drag Toggle Button */
-.edit-banner-icon,
-.drag-toggle-button,
-.gear-button {
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 50%;
-  font-size: 1.3rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
-  user-select: none;
-}
-
-.drag-toggle-button.active {
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 15px #b19cd9;
-  transform: scale(1.2);
-}
-
-.edit-banner-icon:hover,
-.drag-toggle-button:hover,
-.edit-banner-icon:focus,
-.drag-toggle-button:focus {
-  background: rgba(0, 0, 0, 0.5);
-  outline: none;
-  box-shadow: 0 0 20px #b19cd9;
-  transform: scale(1.15);
-}
-
-/* Avatar Orbit Wrapper */
 .avatar-orbit-wrapper {
   position: absolute;
-  top: 45%;
+  top: 50%;
   left: 50%;
   width: 240px;
   height: 240px;
   transform: translate(-50%, -50%);
   z-index: 15;
-  pointer-events: auto;
   text-align: center;
-  filter: drop-shadow(0 0 12px #b19cd9);
-  transition: filter 0.3s ease;
+  pointer-events: auto;
+  filter: drop-shadow(0 0 12px var(--primary, #b19cd9));
 }
 
-.avatar-orbit-wrapper:hover {
-  filter: drop-shadow(0 0 24px #9a86b6);
-}
-
-/* Center the avatar exactly */
 .avatar-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
   width: 110px;
   height: 110px;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   overflow: hidden;
   background: #eae6f7;
-  box-shadow:
-    0 0 12px #9a86b6,
-    inset 0 0 15px #cfc3f9;
-  transform: translate(-50%, -50%);
+  box-shadow: 0 0 12px var(--primary, #9a86b6), inset 0 0 15px var(--purple-inset);
   z-index: 20;
-  transition: box-shadow 0.3s ease;
-}
-
-.avatar-wrapper:hover {
-  box-shadow:
-    0 0 18px #b19cd9,
-    inset 0 0 25px #d8cbfa;
 }
 
 .profile-avatar {
@@ -342,10 +74,8 @@ body {
   border-radius: 50%;
   border: 4px solid white;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  image-rendering: auto;
 }
 
-/* Social Links Orbit */
 .social-links-orbit {
   position: absolute;
   top: 50%;
@@ -355,10 +85,9 @@ body {
   transform: translate(-50%, -50%);
   z-index: 10;
   pointer-events: none;
-  filter: drop-shadow(0 0 6px #b19cd9);
+  filter: drop-shadow(0 0 6px var(--primary, #b19cd9));
 }
 
-/* Orbit icon styling with glowing pulse */
 .orbit-icon {
   position: absolute;
   top: 50%;
@@ -369,9 +98,7 @@ body {
   background: white;
   border-radius: 50%;
   color: #444;
-  box-shadow:
-    0 0 8px rgba(0, 0, 0, 0.15),
-    0 0 8px #b19cd9 inset;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15), 0 0 8px var(--primary, #b19cd9) inset;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -383,42 +110,35 @@ body {
   animation: pulse-glow 3.6s ease-in-out infinite alternate;
 }
 
-@keyframes pulse-glow {
-  0% {
-    box-shadow:
-      0 0 6px rgba(177, 156, 217, 0.4),
-      0 0 6px #9a86b6 inset;
-  }
-  100% {
-    box-shadow:
-      0 0 16px rgba(177, 156, 217, 1),
-      0 0 20px #7c6ba3 inset;
-  }
-}
-
 .orbit-icon:hover {
   transform: rotate(var(--angle)) translateX(90px) rotate(calc(-1 * var(--angle))) scale(1.3);
   color: var(--primary, #7c6ba3);
-  box-shadow:
-    0 0 20px #b19cd9,
-    0 0 30px #9a86b6 inset;
+  box-shadow: 0 0 20px var(--primary, #b19cd9), 0 0 30px var(--primary, #9a86b6) inset;
   animation-play-state: paused;
 }
 
-/* Username below orbit wrapper */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 6px rgba(177, 156, 217, 0.4), 0 0 6px #9a86b6 inset;
+  }
+  100% {
+    box-shadow: 0 0 16px rgba(177, 156, 217, 1), 0 0 20px #7c6ba3 inset;
+  }
+}
+
 .profile-details > h2 {
   margin-top: 160px;
   font-weight: 800;
   font-size: 2.2rem;
   color: #3e3c59;
   letter-spacing: 0.03em;
-  text-shadow: 0 0 6px #b19cd9;
+  text-shadow: 0 0 6px var(--primary);
   user-select: text;
   transition: color 0.3s ease;
 }
 
 .profile-details > h2:hover {
-  color: #d8cbfa;
+  color: var(--primary);
 }
 
 /* User Details Card with neumorphic style */
@@ -429,29 +149,23 @@ body {
   background: #f9f8fd;
   border-radius: 20px;
   box-shadow:
-    8px 8px 15px rgba(180, 175, 195, 0.5),
-    -8px -8px 15px rgba(210, 205, 225, 0.7);
-  color: #4b4a5a;
+    1px 1px 15px var(--primary),
+    -1px -1px 15px var(--primary);
+  color: var(--primary);
   text-align: left;
   font-size: 1.1rem;
   line-height: 1.8;
-  border: 1px solid rgba(180, 175, 195, 0.4);
+  border: 1px solid var(--primary);
   user-select: text;
   transition: box-shadow 0.3s ease;
-}
-
-.user-details:hover {
-  box-shadow:
-    12px 12px 20px rgba(180, 175, 195, 0.7),
-    -12px -12px 25px rgba(210, 205, 225, 0.9);
 }
 
 .user-details h3 {
   font-size: 2.4rem;
   font-weight: 900;
   margin-bottom: 1.5rem;
-  color: #6b5ea3;
-  text-shadow: 0 0 8px #b19cd9;
+  color: black;
+  text-shadow: 0 0 3px var(--primary);
   letter-spacing: 0.04em;
   user-select: text;
 }
@@ -472,7 +186,7 @@ body {
     inset 0 0 8px rgba(255, 255, 255, 0.7),
     0 4px 8px rgba(0, 0, 0, 0.05);
   font-weight: 600;
-  color: #635f7a;
+  color: black;
   transition: background-color 0.4s ease, box-shadow 0.4s ease;
   cursor: default;
 }
@@ -480,17 +194,22 @@ body {
 .user-details ul li strong {
   display: inline-block;
   width: 90px;
-  color: #a49ccf;
+  color: black;
+}
+
+.user-details:hover {
+  box-shadow:
+    12px 12px 20px var(--primary),
+    -12px -12px 25px var(--primary);
 }
 
 .user-details ul li:hover {
-  background: #d8d5f0;
+  background: var(--primary);
   box-shadow:
-    inset 0 0 15px #b19cd9,
-    0 6px 18px #9a86b6;
+    inset 0 0 15px var(--primary),
+    0 6px 18px var(--primary);
 }
 
-/* User Posts Section */
 .user-posts {
   max-width: 900px;
   margin: 2rem auto 5rem auto;
@@ -498,9 +217,9 @@ body {
   background: #ffffff;
   border-radius: 24px;
   box-shadow:
-    0 10px 20px rgb(0 0 0 / 0.05),
-    0 6px 6px rgb(0 0 0 / 0.03);
-  color: #2b2e3a;
+    0 10px 20px var(--primary),
+    0 6px 6px var(--primary);
+  color: black;
   font-family: 'Inter', system-ui, sans-serif;
   transition: box-shadow 0.3s ease;
 }
@@ -519,18 +238,10 @@ body {
   font-weight: 600;
 }
 
-/* Add subtle hover shadow for user posts container */
-.user-posts:hover {
-  box-shadow:
-    0 15px 30px rgb(0 0 0 / 0.1),
-    0 8px 10px rgb(0 0 0 / 0.05);
-}
-
-/* Responsive tweaks */
 @media (max-width: 768px) {
-  .navbar-content {
+  /* .navbar-content {
     max-width: 90%;
-  }
+  } */
 
   .user-details,
   .user-posts {
@@ -538,33 +249,48 @@ body {
     margin: 1.5rem auto;
     padding: 1.5rem 2rem;
   }
+}
+/* Profile Banner & Avatar Orbit Styles */
 
-  .avatar-orbit-wrapper {
-    width: 180px;
-    height: 180px;
-  }
-
-  .avatar-wrapper {
-    width: 85px;
-    height: 85px;
-  }
-
-  .orbit-icon {
-    width: 32px;
-    height: 32px;
-    margin: -16px;
-    font-size: 1.3rem;
-    transform: rotate(var(--angle)) translateX(55px) rotate(calc(-1 * var(--angle)));
-  }
-
-  .profile-banner {
-    height: 220px;
-  }
+.profile-page {
+  width: 100%;
+  background: #fff; /* changed to white */
+  color: black; /* dark text */
+  min-height: 100vh;
+  padding-bottom: 3rem;
+  overflow-x: hidden;
+  position: relative;
+  scroll-margin-top: 220px; /* for anchor nav */
+}
+/* Shared style for icon buttons */
+.edit-banner-icon,
+.drag-toggle-button,
+.gear-button {
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  border-radius: 50%;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
 }
 
-@media (max-width: 600px) {
-  .user-details ul {
-    grid-template-columns: 1fr;
-  }
+.edit-banner-icon:hover,
+.drag-toggle-button:hover,
+.gear-button:hover {
+  background-color: var(--primary);
+  color: #fff;
+  transform: scale(1.1);
 }
 
+/* Active drag button state */
+.drag-toggle-button.active {
+  background-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 10px var(--primary);
+}
